@@ -1,0 +1,58 @@
+- name: Install Nginx and Jenkins
+  hosts: 127.0.0.1  # localhost
+  become: yes
+  become_user: root
+
+  tasks:
+    # - name: Add Jenkins APT Repository Key
+    #   apt_key:
+    #     url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+    #     state: present
+
+    # - name: Add Jenkins APT Repository
+    #   apt_repository:
+    #     repo: deb https://pkg.jenkins.io/debian-stable binary/
+    #     state: present
+
+    - name: Shell commands for Jenkins APT repository and key
+      shell: |
+        curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+        echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+    - name: Update APT Package Cache
+      apt:
+        update_cache: yes
+
+    - name: Install Nginx and Jenkins
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - nginx
+        - default-jdk
+        - default-jre
+        - jenkins
+
+    - name: Start Jenkins Service
+      service:
+        name: jenkins
+        state: started
+        enabled: yes
+
+    - name: Configure Nginx Document Root
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/sites-available/default
+      notify:
+        - Reload Nginx
+
+    - name: Change ownership of web folder
+      shell: |
+        chown -R jenkins:jenkins /var/www/html
+
+
+  handlers:
+    - name: Reload Nginx
+      service:
+        name: nginx
+        state: reloaded
