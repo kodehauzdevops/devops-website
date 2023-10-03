@@ -33,6 +33,7 @@ https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/
       loop:
         - nginx
         - default-jdk
+        - default-jre
         - jenkins
 
     - name: Start Jenkins Service
