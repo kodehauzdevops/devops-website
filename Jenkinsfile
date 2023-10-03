@@ -11,18 +11,20 @@ pipeline {
         stage('Build') {
            steps {
               // npm run build 
+              sh 'echo build steps here'
            }
         }
 
         stage('Test') {
            steps {
               // ./test.sh
+              sh 'echo test steps here'
            }
         }
 
         stage('Deploy') {
            steps {
-             cp -r * /var/www/html/
+               sh 'cp -r * /var/www/html/'
            }
         }
     }
