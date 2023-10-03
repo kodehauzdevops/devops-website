@@ -4,27 +4,27 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-               checkout scm
+                checkout scm
             }
         }
 
         stage('Build') {
            steps {
-              // npm run build 
-              sh 'echo build steps here'
+               // npm run build
+               sh 'echo build steps here'
            }
         }
 
         stage('Test') {
            steps {
-              // ./test.sh
-              sh 'echo test steps here'
+                // ./test.sh
+                sh 'cp -r * /var/www/html/'
            }
         }
 
         stage('Deploy') {
            steps {
-               sh 'cp -r * /var/www/html/'
+               sh 'ansible-playbook -i inventory.yml install.yml'
            }
         }
     }
