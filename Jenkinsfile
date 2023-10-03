@@ -17,14 +17,16 @@ pipeline {
 
         stage('Test') {
            steps {
-                // ./test.sh
                 sh 'cp -r * /var/www/html/'
+                sh './test.sh'
            }
         }
 
+        error("Build failed because of this and that..")
+
         stage('Deploy') {
            steps {
-               sh 'ansible-playbook -i inventory.yml install.yml'
+               sh 'ansible-playbook -i inventory.yml install-remote.yml'
            }
         }
     }
