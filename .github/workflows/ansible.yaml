@@ -1,10 +1,10 @@
 on:
   push:
     branches:
-      - master
+      - project
   pull_request:
     branches:
-      - master
+      - project
 
 jobs:
   stage:
