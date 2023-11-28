@@ -1,0 +1,27 @@
+on:
+  push:
+    branches:
+      - project
+  pull_request:
+    branches:
+      - project
+
+
+jobs:
+  
+  stage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy with rsync to EC2
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -avzr --delete --exclude '.git' --exclude '.github' 
+          path: ./
+          remote_path: ${{ secrets.EC2_DOC_ROOT }}
+          remote_host: ${{ secrets.EC2_INSTANCE_IP }}
+          remote_user: ${{ secrets.EC2_REMOTE_USER }}
+          remote_key: "${{ secrets.EC2_SSH_PRIVATE_KEY }}"
+
