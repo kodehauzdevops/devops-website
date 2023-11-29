@@ -28,4 +28,4 @@
       copy:
         src: ./
         dest: /var/www/html
-        exclude: ['ansible-deploy.yml']
+        exclude: ['ansible.yaml']
