@@ -1,0 +1,30 @@
+on:
+  push:
+    branches:
+      - project
+  pull_request:
+    branches:
+      - project
+
+jobs:
+  stage:
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+
+        - name: Run playbook
+          uses: dawidd6/action-ansible-playbook@v2
+          with:
+            playbook: ansible-deploy.yml
+            directory: ./
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
+            options: |
+              --user ${{ secrets.SSH_USERNAME }}
+            inventory: |
+              [all]
+              ${{ secrets.SSH_INSTANCE_IP }}
+
+              [webhost]
+              ${{ secrets.SSH_INSTANCE_IP }}
