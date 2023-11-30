@@ -1,0 +1,56 @@
+on:
+  push:
+    branches:
+      - project
+  pull_request:
+    branches:
+      - project
+
+jobs:
+ # sonarcloud:
+  #    runs-on: ubuntu-latest
+#
+ #     steps:
+  #      - name: Checkout code
+   #       uses: actions/checkout@v3
+
+#        - name: Set up JDK
+ #         uses: actions/setup-java@v2
+  #        with:
+   #         distribution: 'adopt'
+    #        java-version: '17'
+
+     #   - name: SonarCloud Scan
+      #    uses: sonarsource/sonarcloud-github-action@master
+       #   env:
+        #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         #   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+       # - name: Upload SonarQube results
+        #  uses: actions/upload-artifact@v2
+       #   with:
+        #    name: sonarqube-report
+         #   path: .scannerwork/report```
+
+  stage:
+      runs-on: ubuntu-latest
+     # needs: sonarcloud
+
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+
+        - name: Run playbook
+          uses: dawidd6/action-ansible-playbook@v2
+          with:
+            playbook: ansible-deploy.yml
+            directory: ./
+            key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+            options: |
+              --user ubuntu
+            inventory: |
+              [all]
+              ${{ secrets.EC2_INSTANCE_IP }}
+
+              [webhost]
+              ${{ secrets.EC2_INSTANCE_IP }}
