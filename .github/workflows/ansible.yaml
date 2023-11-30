@@ -27,11 +27,11 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-        - name: Upload SonarQube results
-          uses: actions/upload-artifact@v2
-          with:
-            name: sonarqube-report
-            path: .scannerwork/report```
+       # - name: Upload SonarQube results
+        #  uses: actions/upload-artifact@v2
+       #   with:
+        #    name: sonarqube-report
+         #   path: .scannerwork/report```
 
   stage:
       runs-on: ubuntu-latest
