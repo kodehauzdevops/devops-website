@@ -47,7 +47,6 @@ jobs:
             playbook: ansible-deploy.yml
             directory: ./
             key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-
             options: |
               --user ubuntu
             inventory: |
