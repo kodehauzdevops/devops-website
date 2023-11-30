@@ -6,7 +6,6 @@ on:
     branches:
       - project
 
-
 jobs:
  # sonarcloud:
   #    runs-on: ubuntu-latest
