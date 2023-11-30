@@ -20,6 +20,8 @@ jobs:
             playbook: ansible-deploy.yml
             directory: ./
             key: ${{ secrets.SSH_PRIVATE_KEY }}
+            options: |
+              --user ${{ secrets.SSH_USERNAME }}
             inventory: |
               [all]
               ${{ secrets.SSH_INSTANCE_IP }}
