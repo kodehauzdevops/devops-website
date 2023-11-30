@@ -28,4 +28,4 @@
       copy:
         src: ./
         dest: /var/www/html
-        exclude: ['ansible-playbook.yaml']
+       # exclude: ['ansible-playbook.yaml']
