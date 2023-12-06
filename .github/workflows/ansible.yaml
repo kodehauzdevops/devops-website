@@ -1,0 +1,72 @@
+on:
+  push:
+    branches:
+      - project
+  pull_request:
+    branches:
+      - project
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Start http server
+        run: |
+          npm run server
+
+      - name: Run Cypress tests
+        run: |
+          npm run cy:test
+
+
+
+  #sonarqube-analysis:
+    #runs-on: ubuntu-latest
+    #steps:
+      #- name: Checkout code
+       # uses: actions/checkout@v2
+      #- name: Set up JDK
+        #uses: actions/setup-java@v2
+        #with:
+          #distribution: 'adopt'
+          #java-version: '17'
+      #- name: SonarCloud  Scan
+        #uses: sonarsource/sonarcloud-github-action@master
+        #env:
+          #SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  stage:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+
+        - name: Run playbook
+          uses: dawidd6/action-ansible-playbook@v2
+          with:
+            playbook: ansible-deploy.yaml
+            directory: ./
+            key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+            options: |
+              --user ubuntu
+            inventory: |
+              [all]
+              ${{ secrets.EC2_INSTANCE_IP }}
+
+              [webhost]
+              ${{ secrets.EC2_INSTANCE_IP }}
+  
