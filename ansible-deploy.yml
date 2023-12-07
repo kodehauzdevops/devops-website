@@ -32,13 +32,13 @@
 
     - name: Pull Docker Image
       docker_image:
-        name: segure/projdocker:latest
+        name: almaudoh/testimage:latest
         source: pull
 
     - name: Run Docker Container
       docker_container:
         name: major_container
-        image: segure/projdocker:latest
+        image: almaudoh/testimage:latest
         state: started
         ports:
           - "80:80"
