@@ -32,13 +32,13 @@
 
     - name: Pull Docker Image
       docker_image:
-        name: almaudoh/testimage:latest
+        name: "{{ lookup('env', 'DOCKER_IMAGENAME') }}"
         source: pull
 
     - name: Run Docker Container
       docker_container:
         name: major_container
-        image: almaudoh/testimage:latest
+        image: "{{ lookup('env', 'DOCKER_IMAGENAME') }}"
         state: started
         ports:
-          - "80:80"
+          - "8080:80"
