@@ -1,0 +1,43 @@
+---
+- name: Deploy Docker Container
+  hosts: webhost
+  become: yes
+
+tasks:
+
+  - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+  - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+  - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+  - name: Docker Login
+      shell: |
+        echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
+      environment:
+        DOCKER_USERNAME: "{{ lookup('env', 'DOCKER_USERNAME') }}"
+        DOCKER_PASSWORD: "{{ lookup('env', 'DOCKER_PASSWORD') }}"
+      ignore_errors: yes
+
+  - name: Pull Docker Image 
+      docker_image:
+        name: "{{ lookup('env', 'DOCKER_IMAGENAME') }}"
+        source: pull
+
+  - name: Run Docker Container
+      docker_container:
+        name: major_container
+        image: "{{ lookup('env', 'DOCKER_IMAGENAME') }}"
+        state: started
+        ports:
+          - "8080:80"
