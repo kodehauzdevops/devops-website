@@ -40,4 +40,4 @@ tasks:
         image: "{{ lookup('env', 'DOCKER_IMAGENAME') }}"
         state: started
         ports:
-          - "80:80"
+          - "8080:80"
